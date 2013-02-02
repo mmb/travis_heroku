@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = 'travis-heroku'
+  s.name = 'travis_heroku'
   s.version = '0.0.1'
   s.summary = 'Easily trigger Heroku deploys from Travis builds.'
   s.description = s.summary
