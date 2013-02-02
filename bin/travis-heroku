@@ -6,10 +6,10 @@ heroku = Heroku::API.new
 
 key_path = File.expand_path('~/.ssh/id_rsa')
 key_id = "travis#{ENV['TRAVIS_JOB_NUMBER']}"
-puts `ssh-keygen -f #{key_path} -C #{key_id} -P ''`
+system "ssh-keygen -f #{key_path} -C #{key_id} -P ''"
 heroku.post_key(File.read("#{key_path}.pub"))
 
-puts `git remote add heroku git@heroku.com:${HEROKU_APP}.git`
-puts `GIT_SSH=ssh-nostrict git push heroku master`
+system "git remote add heroku git@heroku.com:${HEROKU_APP}.git"
+system({'GIT_SSH' => 'ssh-nostrict'}, 'git push heroku master')
 
 heroku.delete_key key_id
