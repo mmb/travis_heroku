@@ -10,6 +10,12 @@ system "ssh-keygen -f #{key_path} -C #{key_id} -P ''"
 heroku.post_key(File.read("#{key_path}.pub"))
 
 system "git remote add heroku git@heroku.com:${HEROKU_APP}.git"
-system({'GIT_SSH' => 'ssh-nostrict'}, 'git push heroku master')
+
+open(File.expand_path('~/.ssh/config'), 'a') do |f|
+  f.write "Host heroku.com\n"
+  f.write "  StrictHostKeyChecking no\n"
+end
+
+system 'git push heroku master'
 
 heroku.delete_key key_id
