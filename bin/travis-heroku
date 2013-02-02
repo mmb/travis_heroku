@@ -1,14 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 
-wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sudo sh
+require 'heroku-api'
 
-KEY_PATH=$HOME/.ssh/id_rsa
-KEY_ID=travis$TRAVIS_JOB_NUMBER
-ssh-keygen -f $KEY_PATH -C $KEY_ID -P ''
-heroku keys:add
+heroku = Heroku::API.new
 
-git remote add heroku git@heroku.com:${HEROKU_APP}.git
-GIT_SSH=ssh-nostrict
-git push heroku master
+key_path = File.expand_path('~/.ssh/id_rsa')
+key_id = "travis#{ENV['TRAVIS_JOB_NUMBER']}"
+puts `ssh-keygen -f #{key_path} -C #{key_id} -P ''`
+heroku.post_key(File.read("#{key_path}.pub"))
 
-heroku keys:remove $KEY_ID
+puts `git remote add heroku git@heroku.com:${HEROKU_APP}.git`
+puts `GIT_SSH=ssh-nostrict git push heroku master`
+
+heroku.delete_key key_id
