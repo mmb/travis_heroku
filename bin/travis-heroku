@@ -18,4 +18,8 @@ end
 
 system 'git push heroku master'
 
+heroku.put_config_vars ENV['HEROKU_APP'],
+                       'DEPLOYED_SHA' => `git rev-parse HEAD`,
+                       'DEPLOYED_TIME' => Time.now.utc.to_s
+
 heroku.delete_key key_id

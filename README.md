@@ -29,3 +29,10 @@ Add an after_success script to your .travis.yml file:
 after_success:
   - travis-heroku
 ```
+
+After deployment, the following Heroku config variables will be set:
+
+* DEPLOYED_SHA - the SHA of the git commit that was deployed
+* DEPLOYED_TIME - the time of deployment
+
+These are accessible in the application as environment variables.
